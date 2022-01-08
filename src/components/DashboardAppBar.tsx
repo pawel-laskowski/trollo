@@ -2,19 +2,14 @@ import { useFirebase } from 'react-redux-firebase'
 import { useNavigate } from 'react-router-dom'
 import { AppBar, Button, Toolbar, Typography } from '@mui/material'
 
-export const LoginPage = () => {
+export const DashboardAppBar = () => {
   const firebase = useFirebase()
   const navigate = useNavigate()
 
-  const signInWithGoogle = () => {
-    firebase
-      .login({
-        provider: 'google',
-        type: 'popup',
-      })
-      .then(() => {
-        navigate('/dashboard')
-      })
+  const logout = () => {
+    firebase.logout().then(() => {
+      navigate('/')
+    })
   }
   return (
     <div>
@@ -23,18 +18,11 @@ export const LoginPage = () => {
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             Trollo LoginPage
           </Typography>
-          <Button
-            color="inherit"
-            onClick={(event) => {
-              event.preventDefault()
-              signInWithGoogle()
-            }}
-          >
-            Login
+          <Button color="inherit" onClick={logout}>
+            Logout
           </Button>
         </Toolbar>
       </AppBar>
-      <h1>Trollo Welcome Page</h1>
     </div>
   )
 }
