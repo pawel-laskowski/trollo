@@ -1,10 +1,11 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
+import firebase from 'firebase/compat/app'
 import { Provider } from 'react-redux'
 import { ReactReduxFirebaseProvider } from 'react-redux-firebase'
 import { createFirestoreInstance } from 'redux-firestore'
 import { AppRouter } from './routers/AppRouter'
-import firebase, { rrfConfig } from './firebase/firebase'
+import { rrfConfig } from './firebase/firebase'
 import { store } from './store/store'
 
 const rrfProps = {

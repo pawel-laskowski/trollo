@@ -23,5 +23,3 @@ export const rrfConfig = {
     },
   },
 }
-
-export default firebase

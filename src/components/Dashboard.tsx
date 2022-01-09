@@ -1,9 +1,9 @@
-import { DashboardAppBar } from './DashboardAppBar'
+import { Header } from './Header'
 
 export const Dashboard = () => {
   return (
     <>
-      <DashboardAppBar />
+      <Header />
       <h1>Dashboard</h1>
     </>
   )

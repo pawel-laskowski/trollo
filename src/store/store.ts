@@ -1,5 +1,11 @@
+import { createStore } from 'redux'
+import { rootReducer } from './reducers'
 import { configureStore } from '@reduxjs/toolkit'
-import { actionTypes, firebaseReducer } from 'react-redux-firebase'
+import {
+  actionTypes,
+  firebaseReducer,
+  FirebaseReducer,
+} from 'react-redux-firebase'
 import { firestoreReducer } from 'redux-firestore'
 
 export const storeConfig = configureStore({
@@ -14,3 +20,9 @@ export const storeConfig = configureStore({
       },
     }),
 })
+export interface RootState {
+  firebase: FirebaseReducer.Reducer
+}
+
+const initialState = {}
+export const store = createStore(rootReducer, initialState)
