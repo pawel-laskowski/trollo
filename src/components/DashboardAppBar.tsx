@@ -7,22 +7,27 @@ export const DashboardAppBar = () => {
   const navigate = useNavigate()
 
   const logout = () => {
-    firebase.logout().then(() => {
-      navigate('/')
-    })
+    firebase
+      .logout()
+      .then(() => {
+        navigate('/')
+      })
+      .catch((error) => {
+        console.log('Logout error', error)
+      })
   }
   return (
-    <div>
+    <>
       <AppBar position="static">
         <Toolbar>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            Trollo LoginPage
+          <Typography variant="h6" sx={{ flexGrow: 1 }}>
+            Trollo DashboardPage
           </Typography>
           <Button color="inherit" onClick={logout}>
             Logout
           </Button>
         </Toolbar>
       </AppBar>
-    </div>
+    </>
   )
 }

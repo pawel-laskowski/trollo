@@ -15,18 +15,20 @@ export const LoginPage = () => {
       .then(() => {
         navigate('/dashboard')
       })
+      .catch((error) => {
+        console.log('Login error', error)
+      })
   }
   return (
-    <div>
+    <>
       <AppBar position="static">
         <Toolbar>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+          <Typography variant="h6" sx={{ flexGrow: 1 }}>
             Trollo LoginPage
           </Typography>
           <Button
             color="inherit"
-            onClick={(event) => {
-              event.preventDefault()
+            onClick={() => {
               signInWithGoogle()
             }}
           >
@@ -35,6 +37,6 @@ export const LoginPage = () => {
         </Toolbar>
       </AppBar>
       <h1>Trollo Welcome Page</h1>
-    </div>
+    </>
   )
 }
