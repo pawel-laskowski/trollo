@@ -3,15 +3,8 @@ import { useFirebase, isLoaded, isEmpty } from 'react-redux-firebase'
 import { useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { AppBar, Button, Toolbar, Typography, Snackbar } from '@mui/material'
-import MuiAlert, { AlertProps } from '@mui/material/Alert'
+import MuiAlert from '@mui/material/Alert'
 import { RootState } from '../store/store'
-
-const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
-  props,
-  ref
-) {
-  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />
-})
 
 export const Header = () => {
   const firebase = useFirebase()
@@ -80,13 +73,14 @@ export const Header = () => {
           autoHideDuration={4000}
           onClose={handleCloseAlert}
         >
-          <Alert
+          <MuiAlert
             onClose={handleCloseAlert}
             severity="error"
-            sx={{ width: '100%' }}
+            elevation={6}
+            variant="filled"
           >
             {errorMessage}
-          </Alert>
+          </MuiAlert>
         </Snackbar>
       </AppBar>
     </>
