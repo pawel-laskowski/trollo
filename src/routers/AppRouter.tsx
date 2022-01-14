@@ -6,21 +6,10 @@ import { PrivateRoute } from './PrivateRoute'
 export const AppRouter = () => (
   <BrowserRouter>
     <Routes>
-      <Route
-        path="/"
-        element={
-          <PublicRoute>
-            <LoginPage />
-          </PublicRoute>
-        }
-      />
+      <Route path="/" element={<PublicRoute children={<LoginPage />} />} />
       <Route
         path="/dashboard"
-        element={
-          <PrivateRoute>
-            <Dashboard />
-          </PrivateRoute>
-        }
+        element={<PrivateRoute children={<Dashboard />} />}
       />
     </Routes>
   </BrowserRouter>

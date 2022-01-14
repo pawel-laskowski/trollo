@@ -12,9 +12,5 @@ export const PublicRoute = ({ children }: { children: ReactNode }) => {
     return <CircularProgress />
   }
 
-  return isLoaded(auth) && !isEmpty(auth) ? (
-    <Navigate to="/dashboard" />
-  ) : (
-    <>{children}</>
-  )
+  return !isEmpty(auth) ? <Navigate to="/dashboard" /> : <>{children}</>
 }

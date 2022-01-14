@@ -12,9 +12,5 @@ export const PrivateRoute = ({ children }: { children: ReactNode }) => {
     return <CircularProgress />
   }
 
-  return isLoaded(auth) && !isEmpty(auth) ? (
-    <>{children}</>
-  ) : (
-    <Navigate to="/" />
-  )
+  return !isEmpty(auth) ? <>{children}</> : <Navigate to="/" />
 }
