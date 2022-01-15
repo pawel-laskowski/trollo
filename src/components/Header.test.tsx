@@ -5,12 +5,9 @@ import { Provider } from 'react-redux'
 import configureStore from 'redux-mock-store'
 import { Header } from './Header'
 
-jest.mock('react-redux-firebase')
+const mockedUseNavigate = jest.fn()
 
-let mockedUseNavigate: jest.Mock
-beforeEach(() => {
-  mockedUseNavigate = jest.fn()
-})
+jest.mock('react-redux-firebase')
 jest.mock('react-router-dom', () => ({
   ...(jest.requireActual('react-router-dom') as object),
   useNavigate: () => mockedUseNavigate,
@@ -28,6 +25,10 @@ const mockLoggedUser = () => {
   ;(isLoaded as unknown as jest.Mock).mockImplementation(() => true)
   ;(isEmpty as unknown as jest.Mock).mockImplementation(() => false)
 }
+
+afterEach(() => {
+  jest.clearAllMocks()
+})
 
 it('should render Login button if user is logged out', () => {
   render(
