@@ -7,7 +7,7 @@ import { PublicRoute } from './PublicRoute'
 
 jest.mock('react-redux-firebase')
 jest.mock('react-router-dom', () => ({
-  ...(jest.requireActual('react-router-dom') as object),
+  ...jest.requireActual('react-router-dom'),
   Navigate: () => <span>DASHBOARD</span>,
 }))
 
