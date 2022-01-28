@@ -5,6 +5,7 @@ import {
   actionTypes,
   firebaseReducer,
   FirebaseReducer,
+  FirestoreReducer,
 } from 'react-redux-firebase'
 import { firestoreReducer } from 'redux-firestore'
 
@@ -22,6 +23,7 @@ export const storeConfig = configureStore({
 })
 export interface RootState {
   firebase: FirebaseReducer.Reducer
+  firestore: FirestoreReducer.Reducer
 }
 
 const initialState = {}
