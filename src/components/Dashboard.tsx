@@ -34,6 +34,7 @@ export const Dashboard = () => {
         style={{
           display: 'flex',
           flexDirection: 'row',
+          alignItems: 'flex-start',
         }}
       >
         <ColumnList columns={newColumns} cards={newCards} />

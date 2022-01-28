@@ -5,7 +5,7 @@ export const CardList = (props: any) => {
     <>
       {props.cards &&
         props.cards.map((card: any) => (
-          <CardItem text={card.text} key={card.cardID} />
+          <CardItem text={card.text} key={card.cardID} cardID={card.cardID} />
         ))}
     </>
   )
