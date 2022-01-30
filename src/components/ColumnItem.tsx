@@ -31,7 +31,9 @@ export const ColumnItem = (props: {
   const [editMode, setEditMode] = useState(false)
   const [presetColumnTitle, setPresetColumnTitle] = useState(props.title)
 
-  const handleChange = ({ currentTarget: { name, value } }: any) => {
+  const handleChange = ({
+    currentTarget: { name, value },
+  }: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
     if (name === 'editColumn') {
       setPresetColumnTitle(value)
     }

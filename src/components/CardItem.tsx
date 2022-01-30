@@ -18,7 +18,9 @@ export const CardItem = (props: {
   const [editMode, setEditMode] = useState(false)
   const [presetCardText, setPresetCardText] = useState(props.text)
 
-  const handleChange = ({ currentTarget: { name, value } }: any) => {
+  const handleChange = ({
+    currentTarget: { name, value },
+  }: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
     if (name === 'editCard') {
       setPresetCardText(value)
     }
