@@ -7,7 +7,11 @@ import DeleteIcon from '@mui/icons-material/Delete'
 import EditIcon from '@mui/icons-material/Edit'
 import { RootState } from '../store/store'
 
-export const CardItem = (props: any) => {
+export const CardItem = (props: {
+  text: string
+  cardID: string
+  key: string
+}) => {
   const firestore = useFirestore()
   const { uid } = useSelector((state: RootState) => state.firebase.auth)
 
@@ -42,20 +46,24 @@ export const CardItem = (props: any) => {
     <>
       <Card
         style={{
-          display: 'flex',
-          justifyContent: 'space-between',
           padding: '10px',
           marginTop: '10px',
         }}
       >
         {editMode ? (
-          <form>
+          <form
+            style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+            }}
+          >
             <TextField
               value={presetCardText}
               variant="standard"
               name="editCard"
               multiline={true}
               onChange={handleChange}
+              sx={{ width: '80%' }}
             />
             <IconButton
               onClick={(event) => {
@@ -68,8 +76,15 @@ export const CardItem = (props: any) => {
             </IconButton>
           </form>
         ) : (
-          <>
-            <Typography variant="subtitle1">{props.text}</Typography>
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+            }}
+          >
+            <Typography variant="subtitle1" sx={{ width: '80%' }}>
+              {props.text}
+            </Typography>
             <div>
               <IconButton onClick={() => setEditMode(true)} size="small">
                 <EditIcon fontSize="inherit" />
@@ -78,7 +93,7 @@ export const CardItem = (props: any) => {
                 <DeleteIcon fontSize="inherit" />
               </IconButton>
             </div>
-          </>
+          </div>
         )}
       </Card>
     </>

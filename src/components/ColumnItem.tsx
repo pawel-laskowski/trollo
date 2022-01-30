@@ -13,14 +13,19 @@ import DeleteIcon from '@mui/icons-material/Delete'
 import EditIcon from '@mui/icons-material/Edit'
 import { CardList } from './CardList'
 import { CardForm } from './CardForm'
-import { RootState } from '../store/store'
+import { Card, RootState } from '../store/store'
 
-export const ColumnItem = (props: any) => {
+export const ColumnItem = (props: {
+  cards: Card[]
+  title: string
+  columnID: string
+  key: string
+}) => {
   const firestore = useFirestore()
   const { uid } = useSelector((state: RootState) => state.firebase.auth)
 
-  const columnCards: any = props.cards.filter(
-    (card: any) => card.column === props.columnID
+  const columnCards: Card[] = props.cards.filter((card: Card) =>
+    card ? card.column === props.columnID : false
   )
 
   const [editMode, setEditMode] = useState(false)
@@ -55,7 +60,12 @@ export const ColumnItem = (props: any) => {
 
   return (
     <Paper
-      sx={{ width: 330, padding: 2, margin: '2px', background: '#ebecf0' }}
+      sx={{
+        width: 330,
+        padding: '10px',
+        marginRight: '10px',
+        background: '#ebecf0',
+      }}
     >
       {editMode ? (
         <form style={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -65,7 +75,7 @@ export const ColumnItem = (props: any) => {
             name="editColumn"
             multiline={true}
             onChange={handleChange}
-            sx={{ backgroundColor: '#fff' }}
+            sx={{ backgroundColor: '#fff', width: '80%' }}
           />
           <div>
             <IconButton
@@ -81,7 +91,9 @@ export const ColumnItem = (props: any) => {
         </form>
       ) : (
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-          <Typography variant="h6">{props.title}</Typography>
+          <Typography variant="h6" sx={{ width: '80%' }}>
+            {props.title}
+          </Typography>
           <div>
             <IconButton onClick={() => setEditMode(true)} size="small">
               <EditIcon fontSize="inherit" />

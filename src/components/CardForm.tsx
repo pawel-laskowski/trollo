@@ -7,7 +7,7 @@ import CheckIcon from '@mui/icons-material/Check'
 import CloseIcon from '@mui/icons-material/Close'
 import { RootState } from '../store/store'
 
-export const CardForm = (props: any) => {
+export const CardForm = (props: { columnID: string }) => {
   const firestore = useFirestore()
   const { uid } = useSelector((state: RootState) => state.firebase.auth)
 
@@ -21,21 +21,23 @@ export const CardForm = (props: any) => {
   }
 
   const addNewCard = (cardText: string) => {
-    firestore
-      .collection('users')
-      .doc(uid)
-      .collection('cards')
-      .add({
-        text: cardText,
-        column: props.columnID,
-      })
-      .then((docRef) => {
-        docRef.update({
-          cardID: docRef.id,
+    if (cardText.trim().length > 0) {
+      firestore
+        .collection('users')
+        .doc(uid)
+        .collection('cards')
+        .add({
+          text: cardText,
+          column: props.columnID,
         })
-      })
-    setPresetCardText('')
-    setOpenForm(false)
+        .then((docRef) => {
+          docRef.update({
+            cardID: docRef.id,
+          })
+        })
+      setPresetCardText('')
+      setOpenForm(false)
+    }
   }
 
   return (
@@ -50,6 +52,7 @@ export const CardForm = (props: any) => {
               value={presetCardText}
               placeholder="Provide card text"
               onChange={handleChange}
+              sx={{ width: '80%' }}
             />
             <IconButton
               size="small"

@@ -21,8 +21,25 @@ export const storeConfig = configureStore({
       },
     }),
 })
+
+export interface Card {
+  cardID: string
+  column: string
+  text: string
+}
+
+export interface Column {
+  columnID: string
+  title: string
+}
+
+export interface DBSchema {
+  cards: Card[]
+  columns: Column[]
+}
+
 export interface RootState {
-  firebase: FirebaseReducer.Reducer
+  firebase: FirebaseReducer.Reducer<any, DBSchema>
   firestore: FirestoreReducer.Reducer
 }
 
