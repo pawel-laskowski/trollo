@@ -21,18 +21,9 @@ export const ColumnForm = () => {
 
   const addNewColumn = (columnTitle: string) => {
     if (columnTitle.trim().length > 0) {
-      firestore
-        .collection('users')
-        .doc(uid)
-        .collection('columns')
-        .add({
-          title: columnTitle,
-        })
-        .then((docRef) => {
-          docRef.update({
-            columnID: docRef.id,
-          })
-        })
+      firestore.collection('users').doc(uid).collection('columns').add({
+        title: columnTitle,
+      })
       setPresetColumnTitle('')
       setOpenForm(false)
     }

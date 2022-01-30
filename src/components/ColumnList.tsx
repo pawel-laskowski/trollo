@@ -1,21 +1,25 @@
-import { Column, DBSchema } from '../store/store'
+import { Card, Column, WithID } from '../store/store'
 import { ColumnItem } from './ColumnItem'
 
-export const ColumnList = (props: DBSchema) => {
+interface Props {
+  cards: WithID<Card>[]
+  columns: WithID<Column>[]
+}
+
+export const ColumnList = ({ cards, columns }: Props) => {
   return (
     <>
-      {props.columns.map((column: Column) => (
-        <>
-          {column && (
+      {columns.map(
+        (column) =>
+          column && (
             <ColumnItem
-              cards={props.cards}
+              cards={cards}
               title={column.title}
-              columnID={column.columnID}
-              key={column.columnID}
+              id={column.id}
+              key={column.id}
             />
-          )}
-        </>
-      ))}
+          )
+      )}
     </>
   )
 }

@@ -13,19 +13,19 @@ import DeleteIcon from '@mui/icons-material/Delete'
 import EditIcon from '@mui/icons-material/Edit'
 import { CardList } from './CardList'
 import { CardForm } from './CardForm'
-import { Card, RootState } from '../store/store'
+import { Card, WithID, RootState } from '../store/store'
 
 export const ColumnItem = (props: {
-  cards: Card[]
+  cards: WithID<Card>[]
   title: string
-  columnID: string
+  id: string
   key: string
 }) => {
   const firestore = useFirestore()
   const { uid } = useSelector((state: RootState) => state.firebase.auth)
 
-  const columnCards: Card[] = props.cards.filter((card: Card) =>
-    card ? card.column === props.columnID : false
+  const columnCards = props.cards.filter((card) =>
+    card ? card.columnID === props.id : false
   )
 
   const [editMode, setEditMode] = useState(false)
@@ -42,9 +42,8 @@ export const ColumnItem = (props: {
       .collection('users')
       .doc(uid)
       .collection('columns')
-      .doc(props.columnID)
+      .doc(props.id)
       .update({ title: columnTitle })
-    console.log(props.columnID)
 
     setEditMode(false)
   }
@@ -54,7 +53,7 @@ export const ColumnItem = (props: {
       .collection('users')
       .doc(uid)
       .collection('columns')
-      .doc(props.columnID)
+      .doc(props.id)
       .delete()
   }
 
@@ -106,7 +105,7 @@ export const ColumnItem = (props: {
       )}
       <Divider variant="middle" style={{ margin: '10px' }} />
       <CardList cards={columnCards} />
-      <CardForm columnID={props.columnID} />
+      <CardForm columnID={props.id} />
     </Paper>
   )
 }

@@ -23,24 +23,28 @@ export const storeConfig = configureStore({
 })
 
 export interface Card {
-  cardID: string
-  column: string
+  columnID: string
   text: string
 }
 
 export interface Column {
-  columnID: string
   title: string
 }
 
+export type WithID<T extends object> = T & { id: string }
+
 export interface DBSchema {
-  cards: Card[]
-  columns: Column[]
+  cards: Record<string, Card> | undefined
+  columns: Record<string, Column> | undefined
+}
+
+interface FirestoreReducer2 extends FirestoreReducer.Reducer {
+  data: DBSchema
 }
 
 export interface RootState {
-  firebase: FirebaseReducer.Reducer<any, DBSchema>
-  firestore: FirestoreReducer.Reducer
+  firebase: FirebaseReducer.Reducer
+  firestore: FirestoreReducer2
 }
 
 const initialState = {}

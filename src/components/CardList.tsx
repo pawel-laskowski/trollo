@@ -1,16 +1,17 @@
-import { Card } from '../store/store'
+import { Card, WithID } from '../store/store'
 import { CardItem } from './CardItem'
 
-export const CardList = (props: { cards: Card[] }) => {
+interface Props {
+  cards: WithID<Card>[]
+}
+
+export const CardList = ({ cards }: Props) => {
   return (
     <>
-      {props.cards.map((card: Card) => (
-        <>
-          {card && (
-            <CardItem text={card.text} key={card.cardID} cardID={card.cardID} />
-          )}
-        </>
-      ))}
+      {cards.map(
+        (card) =>
+          card && <CardItem text={card.text} key={card.id} cardID={card.id} />
+      )}
     </>
   )
 }

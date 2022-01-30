@@ -22,19 +22,10 @@ export const CardForm = (props: { columnID: string }) => {
 
   const addNewCard = (cardText: string) => {
     if (cardText.trim().length > 0) {
-      firestore
-        .collection('users')
-        .doc(uid)
-        .collection('cards')
-        .add({
-          text: cardText,
-          column: props.columnID,
-        })
-        .then((docRef) => {
-          docRef.update({
-            cardID: docRef.id,
-          })
-        })
+      firestore.collection('users').doc(uid).collection('cards').add({
+        text: cardText,
+        columnID: props.columnID,
+      })
       setPresetCardText('')
       setOpenForm(false)
     }
