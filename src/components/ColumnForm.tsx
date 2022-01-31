@@ -14,11 +14,9 @@ export const ColumnForm = () => {
   const [presetColumnTitle, setPresetColumnTitle] = useState('')
 
   const handleChange = ({
-    currentTarget: { name, value },
+    currentTarget: { value },
   }: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
-    if (name === 'addColumn') {
-      setPresetColumnTitle(value)
-    }
+    setPresetColumnTitle(value)
   }
 
   const addNewColumn = (columnTitle: string) => {

@@ -15,11 +15,9 @@ export const CardForm = (props: { columnID: string }) => {
   const [presetCardText, setPresetCardText] = useState('')
 
   const handleChange = ({
-    currentTarget: { name, value },
+    currentTarget: { value },
   }: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
-    if (name === 'addCard') {
-      setPresetCardText(value)
-    }
+    setPresetCardText(value)
   }
 
   const addNewCard = (cardText: string) => {

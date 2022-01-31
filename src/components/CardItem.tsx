@@ -82,14 +82,14 @@ export const CardItem = (props: { text: string; cardID: string }) => {
             <Typography variant="subtitle1" sx={{ width: '80%' }}>
               {props.text}
             </Typography>
-            <div>
+            <Box>
               <IconButton onClick={() => setEditMode(true)} size="small">
                 <EditIcon fontSize="inherit" />
               </IconButton>
               <IconButton onClick={deleteCard} size="small">
                 <DeleteIcon fontSize="inherit" />
               </IconButton>
-            </div>
+            </Box>
           </Box>
         )}
       </Card>
