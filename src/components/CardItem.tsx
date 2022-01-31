@@ -15,7 +15,7 @@ export const CardItem = (props: { text: string; cardID: string }) => {
   const [presetCardText, setPresetCardText] = useState(props.text)
 
   const handleChange = ({
-    currentTarget: { name, value },
+    currentTarget: { value },
   }: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
     setPresetCardText(value)
   }

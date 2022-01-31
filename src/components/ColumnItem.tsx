@@ -33,7 +33,7 @@ export const ColumnItem = (props: Props) => {
   const [presetColumnTitle, setPresetColumnTitle] = useState(props.title)
 
   const handleChange = ({
-    currentTarget: { name, value },
+    currentTarget: { value },
   }: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
     setPresetColumnTitle(value)
   }
@@ -80,7 +80,7 @@ export const ColumnItem = (props: Props) => {
             onChange={handleChange}
             sx={{ backgroundColor: '#fff', width: '80%' }}
           />
-          <div>
+          <Box>
             <IconButton
               onClick={(event) => {
                 event.preventDefault()
@@ -90,21 +90,21 @@ export const ColumnItem = (props: Props) => {
             >
               <CheckIcon fontSize="inherit" />
             </IconButton>
-          </div>
+          </Box>
         </Box>
       ) : (
         <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
           <Typography variant="h6" sx={{ width: '80%' }}>
             {props.title}
           </Typography>
-          <div>
+          <Box>
             <IconButton onClick={() => setEditMode(true)} size="small">
               <EditIcon fontSize="inherit" />
             </IconButton>
             <IconButton onClick={deleteColumn} size="small">
               <DeleteIcon fontSize="inherit" />
             </IconButton>
-          </div>
+          </Box>
         </Box>
       )}
       <Divider variant="middle" style={{ margin: '10px' }} />

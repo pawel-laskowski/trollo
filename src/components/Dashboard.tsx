@@ -12,10 +12,10 @@ export const Dashboard = () => {
     collection: `users/${uid}/columns`,
     storeAs: 'columns',
   })
-  const columndData = useSelector(
+  const columnsData = useSelector(
     (state: RootState) => state.firestore.data.columns
   )
-  const columns = Object.entries(columndData ?? []).map(([id, column]) => ({
+  const columns = Object.entries(columnsData ?? []).map(([id, column]) => ({
     id,
     ...column,
   }))

@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useFirestore } from 'react-redux-firebase'
 import { useSelector } from 'react-redux'
-import { Button, IconButton, TextField, Paper } from '@mui/material'
+import { Button, IconButton, TextField, Paper, Box } from '@mui/material'
 import AddIcon from '@mui/icons-material/Add'
 import CloseIcon from '@mui/icons-material/Close'
 import { RootState } from '../store/store'
@@ -41,7 +41,7 @@ export const ColumnForm = () => {
       }}
     >
       {openForm ? (
-        <form>
+        <Box component="form">
           <TextField
             variant="outlined"
             multiline={true}
@@ -51,7 +51,7 @@ export const ColumnForm = () => {
             onChange={handleChange}
             sx={{ backgroundColor: '#fff', width: '90%' }}
           />
-          <div
+          <Box
             style={{
               marginTop: '10px',
             }}
@@ -68,8 +68,8 @@ export const ColumnForm = () => {
             <IconButton size="small" onClick={() => setOpenForm(false)}>
               <CloseIcon fontSize="inherit" />
             </IconButton>
-          </div>
-        </form>
+          </Box>
+        </Box>
       ) : (
         <Button
           variant="contained"

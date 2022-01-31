@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useFirestore } from 'react-redux-firebase'
 import { useSelector } from 'react-redux'
-import { Button, Card, IconButton, TextField } from '@mui/material'
+import { Button, Card, IconButton, TextField, Box } from '@mui/material'
 import AddIcon from '@mui/icons-material/Add'
 import CheckIcon from '@mui/icons-material/Check'
 import CloseIcon from '@mui/icons-material/Close'
@@ -36,7 +36,7 @@ export const CardForm = (props: { columnID: string }) => {
   return (
     <>
       {openForm ? (
-        <form>
+        <Box component="form">
           <Card sx={{ marginTop: '10px', padding: '10px' }}>
             <TextField
               variant="standard"
@@ -60,13 +60,13 @@ export const CardForm = (props: { columnID: string }) => {
               <CloseIcon fontSize="inherit" />
             </IconButton>
           </Card>
-        </form>
+        </Box>
       ) : (
         <Button
           startIcon={<AddIcon />}
           onClick={() => setOpenForm(true)}
           fullWidth={true}
-          style={{
+          sx={{
             color: 'black',
             marginTop: '10px',
           }}
