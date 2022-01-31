@@ -7,26 +7,27 @@ import {
   TextField,
   Typography,
   Divider,
+  Box,
 } from '@mui/material'
 import CheckIcon from '@mui/icons-material/Check'
 import DeleteIcon from '@mui/icons-material/Delete'
 import EditIcon from '@mui/icons-material/Edit'
 import { CardList } from './CardList'
 import { CardForm } from './CardForm'
-import { Card, WithID, RootState } from '../store/store'
+import { WithID } from '../helpers/types'
+import { Card, RootState } from '../store/store'
 
-export const ColumnItem = (props: {
+interface Props {
   cards: WithID<Card>[]
   title: string
   id: string
-  key: string
-}) => {
+}
+
+export const ColumnItem = (props: Props) => {
   const firestore = useFirestore()
   const { uid } = useSelector((state: RootState) => state.firebase.auth)
 
-  const columnCards = props.cards.filter((card) =>
-    card ? card.columnID === props.id : false
-  )
+  const columnCards = props.cards.filter((card) => card.columnID === props.id)
 
   const [editMode, setEditMode] = useState(false)
   const [presetColumnTitle, setPresetColumnTitle] = useState(props.title)
@@ -34,9 +35,7 @@ export const ColumnItem = (props: {
   const handleChange = ({
     currentTarget: { name, value },
   }: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
-    if (name === 'editColumn') {
-      setPresetColumnTitle(value)
-    }
+    setPresetColumnTitle(value)
   }
 
   const editColumn = (columnTitle: string) => {
@@ -69,7 +68,10 @@ export const ColumnItem = (props: {
       }}
     >
       {editMode ? (
-        <form style={{ display: 'flex', justifyContent: 'space-between' }}>
+        <Box
+          component="form"
+          sx={{ display: 'flex', justifyContent: 'space-between' }}
+        >
           <TextField
             value={presetColumnTitle}
             variant="standard"
@@ -89,9 +91,9 @@ export const ColumnItem = (props: {
               <CheckIcon fontSize="inherit" />
             </IconButton>
           </div>
-        </form>
+        </Box>
       ) : (
-        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+        <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
           <Typography variant="h6" sx={{ width: '80%' }}>
             {props.title}
           </Typography>
@@ -103,7 +105,7 @@ export const ColumnItem = (props: {
               <DeleteIcon fontSize="inherit" />
             </IconButton>
           </div>
-        </div>
+        </Box>
       )}
       <Divider variant="middle" style={{ margin: '10px' }} />
       <CardList cards={columnCards} />

@@ -5,7 +5,7 @@ import {
   actionTypes,
   firebaseReducer,
   FirebaseReducer,
-  FirestoreReducer,
+  FirestoreReducer as FirestoreReducerCore,
 } from 'react-redux-firebase'
 import { firestoreReducer } from 'redux-firestore'
 
@@ -31,20 +31,18 @@ export interface Column {
   title: string
 }
 
-export type WithID<T extends object> = T & { id: string }
-
 export interface DBSchema {
   cards: Record<string, Card> | undefined
   columns: Record<string, Column> | undefined
 }
 
-interface FirestoreReducer2 extends FirestoreReducer.Reducer {
+interface FirestoreReducer extends FirestoreReducerCore.Reducer {
   data: DBSchema
 }
 
 export interface RootState {
   firebase: FirebaseReducer.Reducer
-  firestore: FirestoreReducer2
+  firestore: FirestoreReducer
 }
 
 const initialState = {}

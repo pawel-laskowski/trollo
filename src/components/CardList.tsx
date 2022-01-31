@@ -1,4 +1,5 @@
-import { Card, WithID } from '../store/store'
+import { WithID } from '../helpers/types'
+import { Card } from '../store/store'
 import { CardItem } from './CardItem'
 
 interface Props {
@@ -8,10 +9,9 @@ interface Props {
 export const CardList = ({ cards }: Props) => {
   return (
     <>
-      {cards.map(
-        (card) =>
-          card && <CardItem text={card.text} key={card.id} cardID={card.id} />
-      )}
+      {cards.map(({ text, id }) => (
+        <CardItem text={text} key={id} cardID={id} />
+      ))}
     </>
   )
 }

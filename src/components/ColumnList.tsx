@@ -1,4 +1,5 @@
-import { Card, Column, WithID } from '../store/store'
+import { WithID } from '../helpers/types'
+import { Card, Column } from '../store/store'
 import { ColumnItem } from './ColumnItem'
 
 interface Props {
@@ -10,14 +11,9 @@ export const ColumnList = ({ cards, columns }: Props) => {
   return (
     <>
       {columns.map(
-        (column) =>
-          column && (
-            <ColumnItem
-              cards={cards}
-              title={column.title}
-              id={column.id}
-              key={column.id}
-            />
+        ({ title, id }) =>
+          title !== undefined && (
+            <ColumnItem cards={cards} title={title} id={id} key={id} />
           )
       )}
     </>

@@ -1,5 +1,6 @@
 import { useSelector } from 'react-redux'
 import { useFirestoreConnect } from 'react-redux-firebase'
+import { Box } from '@mui/material'
 import { RootState } from '../store/store'
 import { Header } from './Header'
 import { ColumnList } from './ColumnList'
@@ -11,10 +12,10 @@ export const Dashboard = () => {
     collection: `users/${uid}/columns`,
     storeAs: 'columns',
   })
-  const columns = useSelector(
+  const columndData = useSelector(
     (state: RootState) => state.firestore.data.columns
   )
-  const columnsArray = Object.entries(columns ?? []).map(([id, column]) => ({
+  const columns = Object.entries(columndData ?? []).map(([id, column]) => ({
     id,
     ...column,
   }))
@@ -23,8 +24,10 @@ export const Dashboard = () => {
     collection: `users/${uid}/cards`,
     storeAs: 'cards',
   })
-  const cards = useSelector((state: RootState) => state.firestore.data.cards)
-  const cardsArray = Object.entries(cards ?? []).map(([id, card]) => ({
+  const cardsData = useSelector(
+    (state: RootState) => state.firestore.data.cards
+  )
+  const cards = Object.entries(cardsData ?? []).map(([id, card]) => ({
     id,
     ...card,
   }))
@@ -33,16 +36,16 @@ export const Dashboard = () => {
     <>
       <Header />
       <h1>Dashboard</h1>
-      <div
-        style={{
+      <Box
+        sx={{
           display: 'flex',
           flexDirection: 'row',
           alignItems: 'flex-start',
         }}
       >
-        <ColumnList columns={columnsArray} cards={cardsArray} />
+        <ColumnList columns={columns} cards={cards} />
         <ColumnForm />
-      </div>
+      </Box>
     </>
   )
 }
