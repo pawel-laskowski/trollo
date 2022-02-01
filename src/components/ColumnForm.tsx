@@ -56,8 +56,7 @@ export const ColumnForm = () => {
           >
             <Button
               variant="contained"
-              onClick={(event) => {
-                event.preventDefault()
+              onClick={() => {
                 addNewColumn(presetColumnTitle)
               }}
             >

@@ -10,12 +10,9 @@ interface Props {
 export const ColumnList = ({ cards, columns }: Props) => {
   return (
     <>
-      {columns.map(
-        ({ title, id }) =>
-          title !== undefined && (
-            <ColumnItem cards={cards} title={title} id={id} key={id} />
-          )
-      )}
+      {columns.map(({ title, id }) => (
+        <ColumnItem cards={cards} title={title} id={id} key={id} />
+      ))}
     </>
   )
 }

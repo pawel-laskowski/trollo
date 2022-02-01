@@ -23,14 +23,14 @@ interface Props {
   id: string
 }
 
-export const ColumnItem = (props: Props) => {
+export const ColumnItem = ({ cards, title, id }: Props) => {
   const firestore = useFirestore()
   const { uid } = useSelector((state: RootState) => state.firebase.auth)
 
-  const columnCards = props.cards.filter((card) => card.columnID === props.id)
+  const columnCards = cards.filter((card) => card.columnID === id)
 
   const [editMode, setEditMode] = useState(false)
-  const [presetColumnTitle, setPresetColumnTitle] = useState(props.title)
+  const [presetColumnTitle, setPresetColumnTitle] = useState(title)
 
   const handleChange = ({
     currentTarget: { value },
@@ -38,13 +38,13 @@ export const ColumnItem = (props: Props) => {
     setPresetColumnTitle(value)
   }
 
-  const editColumn = (columnTitle: string) => {
+  const editColumn = (newTitle: string) => {
     firestore
       .collection('users')
       .doc(uid)
       .collection('columns')
-      .doc(props.id)
-      .update({ title: columnTitle })
+      .doc(id)
+      .update({ title: newTitle })
 
     setEditMode(false)
   }
@@ -54,7 +54,7 @@ export const ColumnItem = (props: Props) => {
       .collection('users')
       .doc(uid)
       .collection('columns')
-      .doc(props.id)
+      .doc(id)
       .delete()
   }
 
@@ -82,8 +82,7 @@ export const ColumnItem = (props: Props) => {
           />
           <Box>
             <IconButton
-              onClick={(event) => {
-                event.preventDefault()
+              onClick={() => {
                 editColumn(presetColumnTitle)
               }}
               size="small"
@@ -95,7 +94,7 @@ export const ColumnItem = (props: Props) => {
       ) : (
         <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
           <Typography variant="h6" sx={{ width: '80%' }}>
-            {props.title}
+            {title}
           </Typography>
           <Box>
             <IconButton onClick={() => setEditMode(true)} size="small">
@@ -109,7 +108,7 @@ export const ColumnItem = (props: Props) => {
       )}
       <Divider variant="middle" style={{ margin: '10px' }} />
       <CardList cards={columnCards} />
-      <CardForm columnID={props.id} />
+      <CardForm columnID={id} />
     </Paper>
   )
 }

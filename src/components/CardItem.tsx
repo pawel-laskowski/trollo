@@ -7,25 +7,30 @@ import DeleteIcon from '@mui/icons-material/Delete'
 import EditIcon from '@mui/icons-material/Edit'
 import { RootState } from '../store/store'
 
-export const CardItem = (props: { text: string; cardID: string }) => {
+interface Props {
+  text: string
+  cardID: string
+}
+
+export const CardItem = ({ cardID, text }: Props) => {
   const firestore = useFirestore()
   const { uid } = useSelector((state: RootState) => state.firebase.auth)
 
   const [editMode, setEditMode] = useState(false)
-  const [presetCardText, setPresetCardText] = useState(props.text)
+  const [presetCardText, setPresetCardText] = useState(text)
 
   const handleChange = ({
     currentTarget: { value },
   }: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
     setPresetCardText(value)
   }
-  const editCard = (cardText: string) => {
+  const editCard = (newText: string) => {
     firestore
       .collection('users')
       .doc(uid)
       .collection('cards')
-      .doc(props.cardID)
-      .update({ text: cardText })
+      .doc(cardID)
+      .update({ text: newText })
     setEditMode(false)
   }
 
@@ -34,7 +39,7 @@ export const CardItem = (props: { text: string; cardID: string }) => {
       .collection('users')
       .doc(uid)
       .collection('cards')
-      .doc(props.cardID)
+      .doc(cardID)
       .delete()
   }
 
@@ -63,8 +68,7 @@ export const CardItem = (props: { text: string; cardID: string }) => {
               sx={{ width: '80%' }}
             />
             <IconButton
-              onClick={(event) => {
-                event.preventDefault()
+              onClick={() => {
                 editCard(presetCardText)
               }}
               size="small"
@@ -80,7 +84,7 @@ export const CardItem = (props: { text: string; cardID: string }) => {
             }}
           >
             <Typography variant="subtitle1" sx={{ width: '80%' }}>
-              {props.text}
+              {text}
             </Typography>
             <Box>
               <IconButton onClick={() => setEditMode(true)} size="small">

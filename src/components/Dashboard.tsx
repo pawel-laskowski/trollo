@@ -15,10 +15,13 @@ export const Dashboard = () => {
   const columnsData = useSelector(
     (state: RootState) => state.firestore.data.columns
   )
-  const columns = Object.entries(columnsData ?? []).map(([id, column]) => ({
-    id,
-    ...column,
-  }))
+
+  const columns = Object.entries(columnsData ?? [])
+    .filter(([, column]) => column)
+    .map(([id, column]) => ({
+      id,
+      ...column,
+    }))
 
   useFirestoreConnect({
     collection: `users/${uid}/cards`,
@@ -27,10 +30,12 @@ export const Dashboard = () => {
   const cardsData = useSelector(
     (state: RootState) => state.firestore.data.cards
   )
-  const cards = Object.entries(cardsData ?? []).map(([id, card]) => ({
-    id,
-    ...card,
-  }))
+  const cards = Object.entries(cardsData ?? [])
+    .filter(([, card]) => card)
+    .map(([id, card]) => ({
+      id,
+      ...card,
+    }))
 
   return (
     <>
