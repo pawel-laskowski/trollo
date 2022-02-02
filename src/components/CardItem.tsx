@@ -46,7 +46,7 @@ export const CardItem = ({ cardID, text }: Props) => {
   return (
     <>
       <Card
-        style={{
+        sx={{
           padding: '10px',
           marginTop: '10px',
         }}

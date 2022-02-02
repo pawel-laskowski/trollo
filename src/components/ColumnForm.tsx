@@ -50,7 +50,7 @@ export const ColumnForm = () => {
             sx={{ backgroundColor: '#fff', width: '90%' }}
           />
           <Box
-            style={{
+            sx={{
               marginTop: '10px',
             }}
           >
