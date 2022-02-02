@@ -5,6 +5,7 @@ import {
   actionTypes,
   firebaseReducer,
   FirebaseReducer,
+  FirestoreReducer as FirestoreReducerCore,
 } from 'react-redux-firebase'
 import { firestoreReducer } from 'redux-firestore'
 
@@ -20,8 +21,28 @@ export const storeConfig = configureStore({
       },
     }),
 })
+
+export interface Card {
+  columnID: string
+  text: string
+}
+
+export interface Column {
+  title: string
+}
+
+export interface DBSchema {
+  cards: Record<string, Card> | undefined
+  columns: Record<string, Column> | undefined
+}
+
+interface FirestoreReducer extends FirestoreReducerCore.Reducer {
+  data: DBSchema
+}
+
 export interface RootState {
   firebase: FirebaseReducer.Reducer
+  firestore: FirestoreReducer
 }
 
 const initialState = {}
