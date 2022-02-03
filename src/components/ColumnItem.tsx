@@ -107,7 +107,7 @@ export const ColumnItem = ({ cards, title, id }: Props) => {
         </Box>
       )}
       <Divider variant="middle" style={{ margin: '10px' }} />
-      <CardList cards={columnCards} />
+      <CardList cards={columnCards} droppableId={id} />
       <CardForm columnID={id} />
     </Paper>
   )

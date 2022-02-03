@@ -1,12 +1,14 @@
 import { useSelector } from 'react-redux'
-import { useFirestoreConnect } from 'react-redux-firebase'
+import { useFirestore, useFirestoreConnect } from 'react-redux-firebase'
 import { Box } from '@mui/material'
+import { DragDropContext } from 'react-beautiful-dnd'
 import { RootState } from '../store/store'
 import { Header } from './Header'
 import { ColumnList } from './ColumnList'
 import { ColumnForm } from './ColumnForm'
 
 export const Dashboard = () => {
+  const firestore = useFirestore()
   const { uid } = useSelector((state: RootState) => state.firebase.auth)
   useFirestoreConnect({
     collection: `users/${uid}/columns`,
@@ -37,8 +39,30 @@ export const Dashboard = () => {
       ...card,
     }))
 
+  const onDragEnd = ({ destination, source, draggableId }: any) => {
+    if (!destination) {
+      return
+    }
+
+    if (
+      destination.droppableId === source.droppableId &&
+      destination.index === source.index
+    ) {
+      return
+    }
+
+    firestore
+      .collection('users')
+      .doc(uid)
+      .collection('cards')
+      .doc(draggableId)
+      .update({
+        columnID: destination.droppableId,
+      })
+  }
+
   return (
-    <>
+    <DragDropContext onDragEnd={onDragEnd}>
       <Header />
       <h1>Dashboard</h1>
       <Box
@@ -51,6 +75,6 @@ export const Dashboard = () => {
         <ColumnList columns={columns} cards={cards} />
         <ColumnForm />
       </Box>
-    </>
+    </DragDropContext>
   )
 }
