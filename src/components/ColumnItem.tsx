@@ -21,13 +21,12 @@ interface Props {
   cards: WithID<Card>[]
   title: string
   id: string
+  cardsIds: string[]
 }
 
-export const ColumnItem = ({ cards, title, id }: Props) => {
+export const ColumnItem = ({ cards, title, id, cardsIds }: Props) => {
   const firestore = useFirestore()
   const { uid } = useSelector((state: RootState) => state.firebase.auth)
-
-  const columnCards = cards.filter((card) => card.columnID === id)
 
   const [editMode, setEditMode] = useState(false)
   const [presetColumnTitle, setPresetColumnTitle] = useState(title)
@@ -107,8 +106,8 @@ export const ColumnItem = ({ cards, title, id }: Props) => {
         </Box>
       )}
       <Divider variant="middle" style={{ margin: '10px' }} />
-      <CardList cards={columnCards} droppableId={id} />
-      <CardForm columnID={id} />
+      <CardList cards={cards} droppableId={id} />
+      <CardForm columnId={id} cardsIds={cardsIds} />
     </Paper>
   )
 }

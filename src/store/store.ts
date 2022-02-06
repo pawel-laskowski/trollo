@@ -23,12 +23,12 @@ export const storeConfig = configureStore({
 })
 
 export interface Card {
-  columnID: string
   text: string
 }
 
 export interface Column {
   title: string
+  cardsIds: string[]
 }
 
 export interface DBSchema {

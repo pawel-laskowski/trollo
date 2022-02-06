@@ -23,6 +23,7 @@ export const ColumnForm = () => {
     if (columnTitle.trim().length > 0) {
       firestore.collection('users').doc(uid).collection('columns').add({
         title: columnTitle,
+        cardsIds: [],
       })
       setPresetColumnTitle('')
       setOpenForm(false)

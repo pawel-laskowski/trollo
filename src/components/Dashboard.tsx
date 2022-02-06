@@ -51,14 +51,55 @@ export const Dashboard = () => {
       return
     }
 
+    // Remove card from old column
+    const sourceColumn = columns.find(
+      (column) => column.id === source.droppableId
+    )
+    const sourceColumnCards = sourceColumn ? [...sourceColumn.cardsIds] : []
+    sourceColumnCards.splice(source.index, 1)
+
     firestore
       .collection('users')
       .doc(uid)
-      .collection('cards')
-      .doc(draggableId)
+      .collection('columns')
+      .doc(source.droppableId)
       .update({
-        columnID: destination.droppableId,
+        cardsIds: sourceColumnCards,
       })
+
+    // Set position for card in new column
+    if (destination.droppableId === source.droppableId) {
+      const destinationColumnCards = sourceColumnCards
+      destinationColumnCards.splice(destination.index, 0, draggableId)
+
+      firestore
+        .collection('users')
+        .doc(uid)
+        .collection('columns')
+        .doc(destination.droppableId)
+        .update({
+          cardsIds: destinationColumnCards,
+        })
+    } else {
+      const destinationColumn = columns.find(
+        (column) => column.id === destination.droppableId
+      )
+
+      const destinationColumnCards = destinationColumn
+        ? [...destinationColumn.cardsIds]
+        : []
+
+      destinationColumnCards.splice(destination.index, 0, draggableId)
+
+      firestore
+        .collection('users')
+        .doc(uid)
+        .collection('columns')
+        .doc(destination.droppableId)
+        .update({
+          cardsIds: destinationColumnCards,
+        })
+    }
   }
 
   return (

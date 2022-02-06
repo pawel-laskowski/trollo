@@ -14,9 +14,11 @@ export const CardList = ({ cards, droppableId }: Props) => {
     <Droppable droppableId={droppableId}>
       {(provided) => (
         <Box ref={provided.innerRef} {...provided.droppableProps}>
-          {cards.map(({ text, id }, index) => (
-            <CardItem text={text} key={id} id={id} index={index} />
-          ))}
+          {cards
+            .filter((card) => card)
+            .map(({ text, id }, index) => (
+              <CardItem text={text} key={id} id={id} index={index} />
+            ))}
           {provided.placeholder}
         </Box>
       )}

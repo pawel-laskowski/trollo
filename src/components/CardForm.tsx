@@ -8,10 +8,11 @@ import CloseIcon from '@mui/icons-material/Close'
 import { RootState } from '../store/store'
 
 interface Props {
-  columnID: string
+  columnId: string
+  cardsIds: string[]
 }
 
-export const CardForm = ({ columnID }: Props) => {
+export const CardForm = ({ columnId, cardsIds }: Props) => {
   const firestore = useFirestore()
   const { uid } = useSelector((state: RootState) => state.firebase.auth)
 
@@ -26,10 +27,24 @@ export const CardForm = ({ columnID }: Props) => {
 
   const addNewCard = (text: string) => {
     if (text.trim().length > 0) {
-      firestore.collection('users').doc(uid).collection('cards').add({
-        text,
-        columnID,
-      })
+      firestore
+        .collection('users')
+        .doc(uid)
+        .collection('cards')
+        .add({
+          text,
+        })
+        .then((docRef) => {
+          firestore
+            .collection('users')
+            .doc(uid)
+            .collection('columns')
+            .doc(columnId)
+            .update({
+              cardsIds: [...cardsIds, docRef.id],
+            })
+        })
+
       setPresetCardText('')
       setOpenForm(false)
     }

@@ -11,7 +11,7 @@ import { RootState } from '../store/store'
 interface Props {
   text: string
   id: string
-  index: any
+  index: number
 }
 
 export const CardItem = ({ id, text, index }: Props) => {
