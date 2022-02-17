@@ -33,8 +33,6 @@ export const ColumnItem = ({ cards, title, id, cardsIds, index }: Props) => {
   const { columnsOrder } = useSelector(
     (state: any) => state.firestore.data.userData
   )
-  console.log(columnsOrder)
-
   const [editMode, setEditMode] = useState(false)
   const [presetColumnTitle, setPresetColumnTitle] = useState(title)
 
@@ -60,7 +58,9 @@ export const ColumnItem = ({ cards, title, id, cardsIds, index }: Props) => {
       .collection('users')
       .doc(uid)
       .update({
-        columnsOrder: columnsOrder.filter((columnId: any) => columnId !== id),
+        columnsOrder: [
+          ...columnsOrder.filter((columnId: any) => columnId !== id),
+        ],
       })
 
     firestore
