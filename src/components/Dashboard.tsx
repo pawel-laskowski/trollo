@@ -10,6 +10,7 @@ import { ColumnForm } from './ColumnForm'
 export const Dashboard = () => {
   const firestore = useFirestore()
   const { uid } = useSelector((state: RootState) => state.firebase.auth)
+
   useFirestoreConnect({
     collection: `users/${uid}/columns`,
     storeAs: 'columns',
@@ -17,13 +18,20 @@ export const Dashboard = () => {
   const columnsData = useSelector(
     (state: RootState) => state.firestore.data.columns
   )
-
   const columns = Object.entries(columnsData ?? [])
     .filter(([, column]) => column)
     .map(([id, column]) => ({
       id,
       ...column,
     }))
+
+  useFirestoreConnect({
+    collection: `users`,
+    doc: uid,
+    storeAs: 'userData',
+  })
+  const userData = useSelector((state: any) => state.firestore.data.userData)
+  const columnsOrder = userData ? userData.columnsOrder : []
 
   useFirestoreConnect({
     collection: `users/${uid}/cards`,
@@ -39,7 +47,7 @@ export const Dashboard = () => {
       ...card,
     }))
 
-  const onDragEnd = ({ destination, source, draggableId }: any) => {
+  const onDragEnd = ({ destination, source, draggableId, type }: any) => {
     if (!destination) {
       return
     }
@@ -51,54 +59,69 @@ export const Dashboard = () => {
       return
     }
 
-    // Remove card from old column
-    const sourceColumn = columns.find(
-      (column) => column.id === source.droppableId
-    )
-    const sourceColumnCards = sourceColumn ? [...sourceColumn.cardsIds] : []
-    sourceColumnCards.splice(source.index, 1)
+    switch (type) {
+      case 'cards':
+        // Remove card from old column
+        const sourceColumn = columns.find(
+          (column) => column.id === source.droppableId
+        )
+        const sourceColumnCards = sourceColumn ? [...sourceColumn.cardsIds] : []
+        sourceColumnCards.splice(source.index, 1)
 
-    firestore
-      .collection('users')
-      .doc(uid)
-      .collection('columns')
-      .doc(source.droppableId)
-      .update({
-        cardsIds: sourceColumnCards,
-      })
+        firestore
+          .collection('users')
+          .doc(uid)
+          .collection('columns')
+          .doc(source.droppableId)
+          .update({
+            cardsIds: sourceColumnCards,
+          })
 
-    // Set position for card in new column
-    if (destination.droppableId === source.droppableId) {
-      const destinationColumnCards = sourceColumnCards
-      destinationColumnCards.splice(destination.index, 0, draggableId)
+        // Set position for card in new column
+        if (destination.droppableId === source.droppableId) {
+          const destinationColumnCards = sourceColumnCards
+          destinationColumnCards.splice(destination.index, 0, draggableId)
 
-      firestore
-        .collection('users')
-        .doc(uid)
-        .collection('columns')
-        .doc(destination.droppableId)
-        .update({
-          cardsIds: destinationColumnCards,
-        })
-    } else {
-      const destinationColumn = columns.find(
-        (column) => column.id === destination.droppableId
-      )
+          firestore
+            .collection('users')
+            .doc(uid)
+            .collection('columns')
+            .doc(destination.droppableId)
+            .update({
+              cardsIds: destinationColumnCards,
+            })
+        } else {
+          const destinationColumn = columns.find(
+            (column) => column.id === destination.droppableId
+          )
 
-      const destinationColumnCards = destinationColumn
-        ? [...destinationColumn.cardsIds]
-        : []
+          const destinationColumnCards = destinationColumn
+            ? [...destinationColumn.cardsIds]
+            : []
 
-      destinationColumnCards.splice(destination.index, 0, draggableId)
+          destinationColumnCards.splice(destination.index, 0, draggableId)
 
-      firestore
-        .collection('users')
-        .doc(uid)
-        .collection('columns')
-        .doc(destination.droppableId)
-        .update({
-          cardsIds: destinationColumnCards,
-        })
+          firestore
+            .collection('users')
+            .doc(uid)
+            .collection('columns')
+            .doc(destination.droppableId)
+            .update({
+              cardsIds: destinationColumnCards,
+            })
+        }
+        break
+      case 'columns':
+        const newColumnsOrder = [...columnsOrder]
+        newColumnsOrder.splice(source.index, 1)
+        newColumnsOrder.splice(destination.index, 0, draggableId)
+        firestore
+          .collection('users')
+          .doc(uid)
+          .update({ columnsOrder: newColumnsOrder })
+        break
+      default:
+        break
     }
   }
 
@@ -113,8 +136,12 @@ export const Dashboard = () => {
           alignItems: 'flex-start',
         }}
       >
-        <ColumnList columns={columns} cards={cards} />
-        <ColumnForm />
+        <ColumnList
+          columns={columns}
+          cards={cards}
+          columnsOrder={columnsOrder}
+        />
+        <ColumnForm columnsOrder={columnsOrder} />
       </Box>
     </DragDropContext>
   )

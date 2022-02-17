@@ -34,6 +34,7 @@ export interface Column {
 export interface DBSchema {
   cards: Record<string, Card> | undefined
   columns: Record<string, Column> | undefined
+  columnsOrder: string[] | undefined
 }
 
 interface FirestoreReducer extends FirestoreReducerCore.Reducer {

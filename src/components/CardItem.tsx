@@ -43,11 +43,7 @@ export const CardItem = ({ id, text, index }: Props) => {
   return (
     <Draggable draggableId={id} index={index}>
       {(provided) => (
-        <div
-          ref={provided.innerRef}
-          {...provided.draggableProps}
-          {...provided.dragHandleProps}
-        >
+        <Box ref={provided.innerRef} {...provided.draggableProps}>
           <Card
             sx={{
               padding: '10px',
@@ -86,7 +82,11 @@ export const CardItem = ({ id, text, index }: Props) => {
                   justifyContent: 'space-between',
                 }}
               >
-                <Typography variant="subtitle1" sx={{ width: '80%' }}>
+                <Typography
+                  variant="subtitle1"
+                  sx={{ width: '80%' }}
+                  {...provided.dragHandleProps}
+                >
                   {text}
                 </Typography>
                 <Box>
@@ -100,7 +100,7 @@ export const CardItem = ({ id, text, index }: Props) => {
               </Box>
             )}
           </Card>
-        </div>
+        </Box>
       )}
     </Draggable>
   )

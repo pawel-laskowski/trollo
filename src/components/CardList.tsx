@@ -11,7 +11,7 @@ interface Props {
 
 export const CardList = ({ cards, droppableId }: Props) => {
   return (
-    <Droppable droppableId={droppableId}>
+    <Droppable droppableId={droppableId} type="cards">
       {(provided) => (
         <Box ref={provided.innerRef} {...provided.droppableProps}>
           {cards

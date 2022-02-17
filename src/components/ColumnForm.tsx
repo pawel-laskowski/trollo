@@ -6,7 +6,11 @@ import AddIcon from '@mui/icons-material/Add'
 import CloseIcon from '@mui/icons-material/Close'
 import { RootState } from '../store/store'
 
-export const ColumnForm = () => {
+interface Props {
+  columnsOrder: string[]
+}
+
+export const ColumnForm = ({ columnsOrder }: Props) => {
   const firestore = useFirestore()
   const { uid } = useSelector((state: RootState) => state.firebase.auth)
 
@@ -21,10 +25,20 @@ export const ColumnForm = () => {
 
   const addNewColumn = (columnTitle: string) => {
     if (columnTitle.trim().length > 0) {
-      firestore.collection('users').doc(uid).collection('columns').add({
-        title: columnTitle,
-        cardsIds: [],
-      })
+      firestore
+        .collection('users')
+        .doc(uid)
+        .collection('columns')
+        .add({
+          title: columnTitle,
+          cardsIds: [],
+        })
+        .then((docRef) => {
+          firestore
+            .collection('users')
+            .doc(uid)
+            .update({ columnsOrder: [...columnsOrder, docRef.id] })
+        })
       setPresetColumnTitle('')
       setOpenForm(false)
     }

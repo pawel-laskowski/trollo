@@ -12,6 +12,8 @@ import {
 import CheckIcon from '@mui/icons-material/Check'
 import DeleteIcon from '@mui/icons-material/Delete'
 import EditIcon from '@mui/icons-material/Edit'
+import { Draggable } from 'react-beautiful-dnd'
+
 import { CardList } from './CardList'
 import { CardForm } from './CardForm'
 import { WithID } from '../helpers/types'
@@ -22,11 +24,16 @@ interface Props {
   title: string
   id: string
   cardsIds: string[]
+  index: number
 }
 
-export const ColumnItem = ({ cards, title, id, cardsIds }: Props) => {
+export const ColumnItem = ({ cards, title, id, cardsIds, index }: Props) => {
   const firestore = useFirestore()
   const { uid } = useSelector((state: RootState) => state.firebase.auth)
+  const { columnsOrder } = useSelector(
+    (state: any) => state.firestore.data.userData
+  )
+  console.log(columnsOrder)
 
   const [editMode, setEditMode] = useState(false)
   const [presetColumnTitle, setPresetColumnTitle] = useState(title)
@@ -52,62 +59,79 @@ export const ColumnItem = ({ cards, title, id, cardsIds }: Props) => {
     firestore
       .collection('users')
       .doc(uid)
+      .update({
+        columnsOrder: columnsOrder.filter((columnId: any) => columnId !== id),
+      })
+
+    firestore
+      .collection('users')
+      .doc(uid)
       .collection('columns')
       .doc(id)
       .delete()
   }
 
   return (
-    <Paper
-      sx={{
-        width: 330,
-        padding: '10px',
-        marginRight: '10px',
-        background: '#ebecf0',
-      }}
-    >
-      {editMode ? (
-        <Box
-          component="form"
-          sx={{ display: 'flex', justifyContent: 'space-between' }}
-        >
-          <TextField
-            value={presetColumnTitle}
-            variant="standard"
-            name="editColumn"
-            multiline={true}
-            onChange={handleChange}
-            sx={{ backgroundColor: '#fff', width: '80%' }}
-          />
-          <Box>
-            <IconButton
-              onClick={() => {
-                editColumn(presetColumnTitle)
-              }}
-              size="small"
-            >
-              <CheckIcon fontSize="inherit" />
-            </IconButton>
-          </Box>
-        </Box>
-      ) : (
-        <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-          <Typography variant="h6" sx={{ width: '80%' }}>
-            {title}
-          </Typography>
-          <Box>
-            <IconButton onClick={() => setEditMode(true)} size="small">
-              <EditIcon fontSize="inherit" />
-            </IconButton>
-            <IconButton onClick={deleteColumn} size="small">
-              <DeleteIcon fontSize="inherit" />
-            </IconButton>
-          </Box>
+    <Draggable draggableId={id} index={index}>
+      {(provided) => (
+        <Box ref={provided.innerRef} {...provided.draggableProps}>
+          <Paper
+            sx={{
+              width: 330,
+              padding: '10px',
+              marginRight: '10px',
+              background: '#ebecf0',
+            }}
+          >
+            {editMode ? (
+              <Box
+                component="form"
+                sx={{ display: 'flex', justifyContent: 'space-between' }}
+              >
+                <TextField
+                  value={presetColumnTitle}
+                  variant="standard"
+                  name="editColumn"
+                  multiline={true}
+                  onChange={handleChange}
+                  sx={{ backgroundColor: '#fff', width: '80%' }}
+                />
+                <Box>
+                  <IconButton
+                    onClick={() => {
+                      editColumn(presetColumnTitle)
+                    }}
+                    size="small"
+                  >
+                    <CheckIcon fontSize="inherit" />
+                  </IconButton>
+                </Box>
+              </Box>
+            ) : (
+              <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                <Typography
+                  variant="h6"
+                  sx={{ width: '80%' }}
+                  {...provided.dragHandleProps}
+                >
+                  {title}
+                </Typography>
+                <Box>
+                  <IconButton onClick={() => setEditMode(true)} size="small">
+                    <EditIcon fontSize="inherit" />
+                  </IconButton>
+                  <IconButton onClick={deleteColumn} size="small">
+                    <DeleteIcon fontSize="inherit" />
+                  </IconButton>
+                </Box>
+              </Box>
+            )}
+            <Divider variant="middle" style={{ margin: '10px' }} />
+            <CardList cards={cards} droppableId={id} />
+            <CardForm columnId={id} cardsIds={cardsIds} />
+          </Paper>
         </Box>
       )}
-      <Divider variant="middle" style={{ margin: '10px' }} />
-      <CardList cards={cards} droppableId={id} />
-      <CardForm columnId={id} cardsIds={cardsIds} />
-    </Paper>
+    </Draggable>
   )
 }
