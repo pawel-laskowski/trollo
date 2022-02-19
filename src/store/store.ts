@@ -31,10 +31,14 @@ export interface Column {
   cardsIds: string[]
 }
 
+export interface UserData {
+  columnsOrder: string[]
+}
+
 export interface DBSchema {
   cards: Record<string, Card> | undefined
   columns: Record<string, Column> | undefined
-  columnsOrder: string[] | undefined
+  userData: UserData
 }
 
 interface FirestoreReducer extends FirestoreReducerCore.Reducer {

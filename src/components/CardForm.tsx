@@ -25,25 +25,16 @@ export const CardForm = ({ columnId, cardsIds }: Props) => {
     setPresetCardText(value)
   }
 
-  const addNewCard = (text: string) => {
+  const addNewCard = async (text: string) => {
     if (text.trim().length > 0) {
-      firestore
-        .collection('users')
-        .doc(uid)
-        .collection('cards')
-        .add({
-          text,
-        })
-        .then((docRef) => {
-          firestore
-            .collection('users')
-            .doc(uid)
-            .collection('columns')
-            .doc(columnId)
-            .update({
-              cardsIds: [...cardsIds, docRef.id],
-            })
-        })
+      const userRef = firestore.collection('users').doc(uid)
+      const cardRef = await userRef.collection('cards').add({
+        text,
+      })
+      const columnRef = userRef.collection('columns').doc(columnId)
+      columnRef.update({
+        cardsIds: [...cardsIds, cardRef.id],
+      })
 
       setPresetCardText('')
       setOpenForm(false)

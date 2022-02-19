@@ -31,7 +31,7 @@ export const ColumnItem = ({ cards, title, id, cardsIds, index }: Props) => {
   const firestore = useFirestore()
   const { uid } = useSelector((state: RootState) => state.firebase.auth)
   const { columnsOrder } = useSelector(
-    (state: any) => state.firestore.data.userData
+    (state: RootState) => state.firestore.data.userData
   )
   const [editMode, setEditMode] = useState(false)
   const [presetColumnTitle, setPresetColumnTitle] = useState(title)
@@ -58,9 +58,7 @@ export const ColumnItem = ({ cards, title, id, cardsIds, index }: Props) => {
       .collection('users')
       .doc(uid)
       .update({
-        columnsOrder: [
-          ...columnsOrder.filter((columnId: any) => columnId !== id),
-        ],
+        columnsOrder: [...columnsOrder.filter((columnId) => columnId !== id)],
       })
 
     firestore

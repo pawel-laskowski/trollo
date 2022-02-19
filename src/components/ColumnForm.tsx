@@ -23,22 +23,15 @@ export const ColumnForm = ({ columnsOrder }: Props) => {
     setPresetColumnTitle(value)
   }
 
-  const addNewColumn = (columnTitle: string) => {
+  const addNewColumn = async (columnTitle: string) => {
     if (columnTitle.trim().length > 0) {
-      firestore
-        .collection('users')
-        .doc(uid)
-        .collection('columns')
-        .add({
-          title: columnTitle,
-          cardsIds: [],
-        })
-        .then((docRef) => {
-          firestore
-            .collection('users')
-            .doc(uid)
-            .update({ columnsOrder: [...columnsOrder, docRef.id] })
-        })
+      const userRef = firestore.collection('users').doc(uid)
+      const columnRef = await userRef.collection('columns').add({
+        title: columnTitle,
+        cardsIds: [],
+      })
+      userRef.update({ columnsOrder: [...columnsOrder, columnRef.id] })
+
       setPresetColumnTitle('')
       setOpenForm(false)
     }

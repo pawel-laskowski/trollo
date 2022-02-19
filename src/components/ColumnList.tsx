@@ -33,7 +33,8 @@ export const ColumnList = ({ cards, columns, columnsOrder }: Props) => {
         >
           {columnsOrder
             .map((columnId) => columns.find((column) => column.id === columnId))
-            .map(({ title, id, cardsIds }: any, index) => {
+            .filter((column): column is WithID<Column> => !!column)
+            .map(({ title, id, cardsIds }, index) => {
               const columnCards = filterCards(cardsIds, cards)
               return (
                 <ColumnItem
