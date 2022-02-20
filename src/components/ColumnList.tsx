@@ -12,18 +12,10 @@ interface Props {
 
 export const ColumnList = ({ cards, columns, columnsOrder }: Props) => {
   const filterCards = (columnCardsIds: string[], allCards: WithID<Card>[]) => {
-    const filteredCards = columnCardsIds.map((cardId) => {
-      const value = allCards
-        .filter((card): card is WithID<Card> => !!card)
-        .find((card) => cardId === card.id)
-      if (!value) {
-        throw new Error('Card not found')
-      }
-      return value
-    })
-    return filteredCards
+    return columnCardsIds
+      .map((cardId) => allCards.find((card) => cardId === card.id))
+      .filter((card): card is WithID<Card> => !!card)
   }
-
   return (
     <Droppable droppableId="all-columns" direction="horizontal" type="columns">
       {(provided) => (
