@@ -13,7 +13,12 @@ interface Props {
 export const ColumnList = ({ cards, columns, columnsOrder }: Props) => {
   const filterCards = (columnCardsIds: string[], allCards: WithID<Card>[]) => {
     const filteredCards = columnCardsIds.map((cardId) => {
-      const [value] = allCards.filter((card) => cardId === card.id)
+      const value = allCards
+        .filter((card): card is WithID<Card> => !!card)
+        .find((card) => cardId === card.id)
+      if (!value) {
+        throw new Error('Card not found')
+      }
       return value
     })
     return filteredCards

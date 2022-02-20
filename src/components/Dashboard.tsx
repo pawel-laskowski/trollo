@@ -6,6 +6,7 @@ import { RootState } from '../store/store'
 import { Header } from './Header'
 import { ColumnList } from './ColumnList'
 import { ColumnForm } from './ColumnForm'
+import { selectColumnsOrder } from '../helpers/selectors'
 
 export const Dashboard = () => {
   const firestore = useFirestore()
@@ -30,10 +31,8 @@ export const Dashboard = () => {
     doc: uid,
     storeAs: 'userData',
   })
-  const userData = useSelector(
-    (state: RootState) => state.firestore.data.userData
-  )
-  const columnsOrder = userData ? userData.columnsOrder : []
+
+  const columnsOrder = useSelector(selectColumnsOrder)
 
   useFirestoreConnect({
     collection: `users/${uid}/cards`,

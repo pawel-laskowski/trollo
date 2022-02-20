@@ -13,11 +13,11 @@ import CheckIcon from '@mui/icons-material/Check'
 import DeleteIcon from '@mui/icons-material/Delete'
 import EditIcon from '@mui/icons-material/Edit'
 import { Draggable } from 'react-beautiful-dnd'
-
 import { CardList } from './CardList'
 import { CardForm } from './CardForm'
 import { WithID } from '../helpers/types'
 import { Card, RootState } from '../store/store'
+import { selectColumnsOrder } from '../helpers/selectors'
 
 interface Props {
   cards: WithID<Card>[]
@@ -30,9 +30,7 @@ interface Props {
 export const ColumnItem = ({ cards, title, id, cardsIds, index }: Props) => {
   const firestore = useFirestore()
   const { uid } = useSelector((state: RootState) => state.firebase.auth)
-  const { columnsOrder } = useSelector(
-    (state: RootState) => state.firestore.data.userData
-  )
+  const columnsOrder = useSelector(selectColumnsOrder)
   const [editMode, setEditMode] = useState(false)
   const [presetColumnTitle, setPresetColumnTitle] = useState(title)
 
