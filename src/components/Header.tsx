@@ -1,5 +1,10 @@
 import React from 'react'
-import { useFirebase, isLoaded, isEmpty } from 'react-redux-firebase'
+import {
+  useFirebase,
+  useFirestore,
+  isLoaded,
+  isEmpty,
+} from 'react-redux-firebase'
 import { useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { AppBar, Button, Toolbar, Typography, Snackbar } from '@mui/material'
@@ -8,6 +13,7 @@ import { RootState } from '../store/store'
 
 export const Header = () => {
   const firebase = useFirebase()
+  const firestore = useFirestore()
   const navigate = useNavigate()
   const auth = useSelector((state: RootState) => state.firebase.auth)
   const [openAlert, setOpenAlert] = React.useState(false)
@@ -30,8 +36,18 @@ export const Header = () => {
         provider: 'google',
         type: 'popup',
       })
-      .then(() => {
-        navigate('/dashboard')
+      .then((userData) => {
+        if (userData.additionalUserInfo?.isNewUser) {
+          firestore
+            .collection('users')
+            .doc(userData.user?.uid)
+            .update({ columnsOrder: [] })
+            .then(() => {
+              navigate('/dashboard')
+            })
+        } else {
+          navigate('/dashboard')
+        }
       })
       .catch(() => {
         setErrorMessage('Login error! Please try again.')
