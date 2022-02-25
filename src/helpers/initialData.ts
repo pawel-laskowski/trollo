@@ -6,18 +6,22 @@ const initialColumns = [
   { title: 'Done', cardsIds: [] },
 ]
 
-export const createInitialData = (
+export const createInitialData = async (
   firestore: ExtendedFirestoreInstance,
   uid: string | undefined
 ) => {
+  const batch = firestore.batch()
   const userRef = firestore.collection('users').doc(uid)
-  const columnsOrder: string[] = []
-  initialColumns.forEach(async ({ title, cardsIds }) => {
-    const columnRef = await userRef.collection('columns').add({
+  const columnsOrder = initialColumns.map(({ title, cardsIds }) => {
+    const columnRef = userRef.collection('columns').doc()
+    columnRef.set({
       title,
       cardsIds,
     })
-    columnsOrder.push(columnRef.id)
-    userRef.update({ columnsOrder: columnsOrder })
+    return columnRef.id
   })
+
+  userRef.update({ columnsOrder: columnsOrder })
+
+  await batch.commit()
 }

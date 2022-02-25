@@ -37,9 +37,9 @@ export const Header = () => {
         provider: 'google',
         type: 'popup',
       })
-      .then((userData) => {
+      .then(async (userData) => {
         if (userData.additionalUserInfo?.isNewUser) {
-          createInitialData(firestore, userData.user?.uid)
+          await createInitialData(firestore, userData.user?.uid)
           navigate('/dashboard')
         } else {
           navigate('/dashboard')
