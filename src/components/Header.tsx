@@ -10,6 +10,7 @@ import { useSelector } from 'react-redux'
 import { AppBar, Button, Toolbar, Typography, Snackbar } from '@mui/material'
 import MuiAlert from '@mui/material/Alert'
 import { RootState } from '../store/store'
+import { createInitialData } from '../helpers/initialData'
 
 export const Header = () => {
   const firebase = useFirebase()
@@ -38,13 +39,8 @@ export const Header = () => {
       })
       .then((userData) => {
         if (userData.additionalUserInfo?.isNewUser) {
-          firestore
-            .collection('users')
-            .doc(userData.user?.uid)
-            .update({ columnsOrder: [] })
-            .then(() => {
-              navigate('/dashboard')
-            })
+          createInitialData(firestore, userData.user?.uid)
+          navigate('/dashboard')
         } else {
           navigate('/dashboard')
         }
