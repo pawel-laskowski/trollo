@@ -23,17 +23,22 @@ export const storeConfig = configureStore({
 })
 
 export interface Card {
-  columnID: string
   text: string
 }
 
 export interface Column {
   title: string
+  cardsIds: string[]
+}
+
+export interface UserData {
+  columnsOrder: string[]
 }
 
 export interface DBSchema {
   cards: Record<string, Card> | undefined
   columns: Record<string, Column> | undefined
+  userData: UserData | undefined
 }
 
 interface FirestoreReducer extends FirestoreReducerCore.Reducer {

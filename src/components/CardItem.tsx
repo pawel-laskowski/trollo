@@ -5,14 +5,16 @@ import { Card, IconButton, TextField, Typography, Box } from '@mui/material'
 import CheckIcon from '@mui/icons-material/Check'
 import DeleteIcon from '@mui/icons-material/Delete'
 import EditIcon from '@mui/icons-material/Edit'
+import { Draggable } from 'react-beautiful-dnd'
 import { RootState } from '../store/store'
 
 interface Props {
   text: string
-  cardID: string
+  id: string
+  index: number
 }
 
-export const CardItem = ({ cardID, text }: Props) => {
+export const CardItem = ({ id, text, index }: Props) => {
   const firestore = useFirestore()
   const { uid } = useSelector((state: RootState) => state.firebase.auth)
 
@@ -29,74 +31,77 @@ export const CardItem = ({ cardID, text }: Props) => {
       .collection('users')
       .doc(uid)
       .collection('cards')
-      .doc(cardID)
+      .doc(id)
       .update({ text: newText })
     setEditMode(false)
   }
 
   const deleteCard = () => {
-    firestore
-      .collection('users')
-      .doc(uid)
-      .collection('cards')
-      .doc(cardID)
-      .delete()
+    firestore.collection('users').doc(uid).collection('cards').doc(id).delete()
   }
 
   return (
-    <>
-      <Card
-        sx={{
-          padding: '10px',
-          marginTop: '10px',
-        }}
-      >
-        {editMode ? (
-          <Box
-            component="form"
+    <Draggable draggableId={id} index={index}>
+      {(provided) => (
+        <Box ref={provided.innerRef} {...provided.draggableProps}>
+          <Card
             sx={{
-              display: 'flex',
-              justifyContent: 'space-between',
+              padding: '10px',
+              marginTop: '10px',
             }}
           >
-            <TextField
-              value={presetCardText}
-              variant="standard"
-              name="editCard"
-              multiline={true}
-              onChange={handleChange}
-              sx={{ width: '80%' }}
-            />
-            <IconButton
-              onClick={() => {
-                editCard(presetCardText)
-              }}
-              size="small"
-            >
-              <CheckIcon fontSize="inherit" />
-            </IconButton>
-          </Box>
-        ) : (
-          <Box
-            sx={{
-              display: 'flex',
-              justifyContent: 'space-between',
-            }}
-          >
-            <Typography variant="subtitle1" sx={{ width: '80%' }}>
-              {text}
-            </Typography>
-            <Box>
-              <IconButton onClick={() => setEditMode(true)} size="small">
-                <EditIcon fontSize="inherit" />
-              </IconButton>
-              <IconButton onClick={deleteCard} size="small">
-                <DeleteIcon fontSize="inherit" />
-              </IconButton>
-            </Box>
-          </Box>
-        )}
-      </Card>
-    </>
+            {editMode ? (
+              <Box
+                component="form"
+                sx={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                }}
+              >
+                <TextField
+                  value={presetCardText}
+                  variant="standard"
+                  name="editCard"
+                  multiline={true}
+                  onChange={handleChange}
+                  sx={{ width: '80%' }}
+                />
+                <IconButton
+                  onClick={() => {
+                    editCard(presetCardText)
+                  }}
+                  size="small"
+                >
+                  <CheckIcon fontSize="inherit" />
+                </IconButton>
+              </Box>
+            ) : (
+              <Box
+                sx={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                }}
+              >
+                <Typography
+                  variant="subtitle1"
+                  sx={{ width: '80%' }}
+                  {...provided.dragHandleProps}
+                >
+                  {text}
+                </Typography>
+                <Box>
+                  <IconButton onClick={() => setEditMode(true)} size="small">
+                    <EditIcon fontSize="inherit" />
+                  </IconButton>
+                  <IconButton onClick={deleteCard} size="small">
+                    <DeleteIcon fontSize="inherit" />
+                  </IconButton>
+                </Box>
+              </Box>
+            )}
+          </Card>
+        </Box>
+      )}
+    </Draggable>
   )
 }

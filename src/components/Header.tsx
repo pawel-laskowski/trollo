@@ -1,13 +1,20 @@
 import React from 'react'
-import { useFirebase, isLoaded, isEmpty } from 'react-redux-firebase'
+import {
+  useFirebase,
+  useFirestore,
+  isLoaded,
+  isEmpty,
+} from 'react-redux-firebase'
 import { useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { AppBar, Button, Toolbar, Typography, Snackbar } from '@mui/material'
 import MuiAlert from '@mui/material/Alert'
 import { RootState } from '../store/store'
+import { createInitialData } from '../helpers/initialData'
 
 export const Header = () => {
   const firebase = useFirebase()
+  const firestore = useFirestore()
   const navigate = useNavigate()
   const auth = useSelector((state: RootState) => state.firebase.auth)
   const [openAlert, setOpenAlert] = React.useState(false)
@@ -30,8 +37,13 @@ export const Header = () => {
         provider: 'google',
         type: 'popup',
       })
-      .then(() => {
-        navigate('/dashboard')
+      .then(async (userData) => {
+        if (userData.additionalUserInfo?.isNewUser) {
+          await createInitialData(firestore, userData.user?.uid)
+          navigate('/dashboard')
+        } else {
+          navigate('/dashboard')
+        }
       })
       .catch(() => {
         setErrorMessage('Login error! Please try again.')
